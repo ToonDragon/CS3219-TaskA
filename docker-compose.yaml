@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+
+  # contains proxy to external server
+  reverse-proxy:
+    image: nginx:1.17.10
+    container_name: reverse_proxy_container
+    depends_on:
+        - frontend
+    volumes:
+      - ./reverse_proxy/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      # Maps local port 8080 to the container port 80
+      - 8080:80
+
+  
+  # creates a static webpage for demonstration 
+  frontend:
+    image: frontend
+    container_name: frontend_container
+    build:
+      context: ./frontend
+    ports:
+      - 4200:4200
+    #restart: on-failure
